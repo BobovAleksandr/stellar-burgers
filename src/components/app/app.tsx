@@ -28,12 +28,13 @@ const App = () => (
           <Modal children={<OrderInfo />} title={'TODO'} onClose={() => {}} />
         }
       />
+      // TODO модалки должны загружаться на фоне с главной страницей
       <Route
         path='/ingredients/:id'
         element={
           <Modal
             children={<IngredientDetails />}
-            title={'TODO'}
+            title={'Детали ингридиента'}
             onClose={() => {}}
           />
         }
