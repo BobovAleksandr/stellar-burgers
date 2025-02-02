@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { useSelector } from 'react-redux';
+import { getIngredientsSelector } from 'src/services/slices/ingredientsSlice';
 
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 
 export const BurgerIngredients: FC = () => {
+  const { ingredients } = useSelector(getIngredientsSelector);
   /** TODO: взять переменные из стора */
   const buns = [];
   const mains = [];
