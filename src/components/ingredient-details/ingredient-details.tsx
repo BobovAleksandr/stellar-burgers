@@ -16,9 +16,6 @@ export const IngredientDetails: FC = () => {
     (ingredient) => ingredient._id === id
   );
 
-  console.log(ingredients);
-  console.log(ingredientData);
-
   if (!ingredientData) {
     return <Preloader />;
   }

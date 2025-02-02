@@ -4,14 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectIngredientsState } from '@selectors';
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
-import { fetchIngredients } from '../../services/slices/ingredientsSlice';
-import { AppDispatch } from 'src/services/store';
-import { Preloader } from '@ui';
 
 export const BurgerIngredients: FC = () => {
-  const { ingredients, isLoading, error } = useSelector(selectIngredientsState);
-  const dispatch = useDispatch<AppDispatch>();
-  // TODO показать error
+  const { ingredients } = useSelector(selectIngredientsState);
 
   const buns = ingredients.filter((ingredient) => ingredient.type === 'bun');
   const mains = ingredients.filter((ingredient) => ingredient.type === 'main');
@@ -46,10 +41,6 @@ export const BurgerIngredients: FC = () => {
     }
   }, [inViewBuns, inViewFilling, inViewSauces]);
 
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, []);
-
   const onTabClick = (tab: string) => {
     setCurrentTab(tab as TTabMode);
     if (tab === 'bun')
@@ -59,10 +50,6 @@ export const BurgerIngredients: FC = () => {
     if (tab === 'sauce')
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  if (isLoading) {
-    return <Preloader />;
-  }
 
   return (
     <BurgerIngredientsUI
