@@ -5,14 +5,14 @@ import { useSelector } from 'react-redux';
 import { selectConstructorState } from '@selectors';
 
 export const BurgerConstructor: FC = () => {
+  // const constructorItems = useSelector(selectConstructorState);
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
-  const constructorItems = useSelector(selectConstructorState);
-  // const constructorItems = {
-  //   bun: {
-  //     price: 0
-  //   },
-  //   ingredients: []
-  // };
+  const constructorItems = {
+    bun: {
+      price: 0
+    },
+    ingredients: []
+  };
 
   const orderRequest = false;
 
