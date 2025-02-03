@@ -27,7 +27,13 @@ const App = () => {
         <Route
           path='/feed/:number'
           element={
-            <Modal children={<OrderInfo />} title={'TODO'} onClose={() => {}} />
+            <Modal
+              children={<OrderInfo />}
+              title={'TODO номер заказа'}
+              onClose={() => {
+                navigate('/feed');
+              }}
+            />
           }
         />
         // TODO модалки должны загружаться на фоне с главной страницей

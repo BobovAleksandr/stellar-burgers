@@ -2,13 +2,13 @@ import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';
 import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectFeeds } from '@selectors';
+import { selectOrders } from '@selectors';
 import { AppDispatch } from '../../services/store';
 import { fetchFeeds } from '../../services/slices/feedsSlice';
 
 export const Feed: FC = () => {
-  /** TODO: взять переменную из стора **/
-  const { orders } = useSelector(selectFeeds);
+  /** TODO: взять переменную из стора - ГОТОВО **/
+  const orders = useSelector(selectOrders);
   const dispatch = useDispatch<AppDispatch>();
 
   const getFeeds = () => {

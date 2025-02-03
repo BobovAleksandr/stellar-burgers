@@ -7,10 +7,6 @@ import { useParams } from 'react-router-dom';
 
 export const IngredientDetails: FC = () => {
   const { id } = useParams();
-  const currentIngredientId = location.pathname;
-
-  console.log(currentIngredientId);
-
   const { ingredients } = useSelector(selectIngredientsState);
   const ingredientData = ingredients.find(
     (ingredient) => ingredient._id === id
