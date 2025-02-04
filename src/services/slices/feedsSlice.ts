@@ -29,7 +29,7 @@ export const fetchOrderByNumber = createAsyncThunk(
 );
 
 const feedsSlice = createSlice({
-  name: 'feedsSlice',
+  name: 'feeds',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

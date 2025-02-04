@@ -7,7 +7,7 @@ import { AppDispatch } from '../../services/store';
 import { fetchFeeds } from '../../services/slices/feedsSlice';
 
 export const Feed: FC = () => {
-  /** TODO: взять переменную из стора - ГОТОВО **/
+  /** TODO: взять переменную из стора **/
   const orders = useSelector(selectOrders);
   const dispatch = useDispatch<AppDispatch>();
 
