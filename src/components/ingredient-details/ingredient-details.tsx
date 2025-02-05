@@ -2,12 +2,12 @@ import { FC } from 'react';
 import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
 import { useSelector } from 'react-redux';
-import { selectIngredientsState } from '@selectors';
+import { selectIngredients } from '@selectors';
 import { useParams } from 'react-router-dom';
 
 export const IngredientDetails: FC = () => {
   const { id } = useParams();
-  const { ingredients } = useSelector(selectIngredientsState);
+  const ingredients = useSelector(selectIngredients);
   const ingredientData = ingredients.find(
     (ingredient) => ingredient._id === id
   );

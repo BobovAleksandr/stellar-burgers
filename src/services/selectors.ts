@@ -1,14 +1,15 @@
 import { RootState } from './store';
 
-export const selectIngredientsState = (state: RootState) =>
-  state.ingredientsState;
+export const selectIngredientsLoadingStatus = (state: RootState) =>
+  state.ingredients.isLoading;
 
 export const selectIngredients = (state: RootState) =>
-  state.ingredientsState.ingredients;
+  state.ingredients.ingredients;
 
+/* Нужны более точечные селеторы */
 export const selectConstructorState = (state: RootState) =>
-  state.constructorState;
+  state.constructor;
 
-export const selectFeedState = (state: RootState) => state.feedsState;
-export const selectOrders = (state: RootState) => state.feedsState.orders;
-export const selectOrder = (state: RootState) => state.feedsState.selectedOrder;
+export const selectFeedState = (state: RootState) => state.feeds;
+export const selectOrders = (state: RootState) => state.feeds.orders;
+export const selectOrder = (state: RootState) => state.feeds.selectedOrder;
