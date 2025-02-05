@@ -15,11 +15,24 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
+import { useEffect } from 'react';
+import { fetchIngredients } from '../../services/slices/ingredientsSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../services/store';
+import { ProtectedRoute } from '../../utils/protectedRoute';
+import { fetchGetUser } from '../../services/slices/userSlice';
 
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const background = location.state?.background;
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+    dispatch(fetchGetUser());
+  }, []);
 
   return (
     <div className={styles.app}>
@@ -27,22 +40,58 @@ const App = () => {
 
       <Routes location={background || location}>
         <Route path='/feed' element={<Feed />} />
-        {/* <Route path='/feed/:number' element={<OrderInfo />} /> */}
+        <Route path='/feed/:number' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
         <Route path='/' element={<ConstructorPage />} />
-        <Route path='/login' element={<Login />} />
-        {/* TODO модалки должны загружаться на фоне с главной страницей */}
-        {/* <Route
-          path='/profile/orders/:number'
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route
+          path='/register'
           element={
-            <Modal children={<OrderInfo />} title={'TODO'} onClose={() => {}} />
+            <ProtectedRoute onlyUnAuth>
+              <Register />
+            </ProtectedRoute>
           }
-        /> */}
-        {/* <Route path='/register' element={<Register />} /> */}
-        {/* <Route path='/forgot-password' element={<ForgotPassword />} /> */}
-        {/* <Route path='/reset-password' element={<ResetPassword />} /> */}
-        <Route path='/profile' element={<Profile />} />
-        {/* <Route path='/profile/orders' element={<ProfileOrders />} /> */}
+        />
+        <Route
+          path='/login'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile'
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/forgot-password'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <ForgotPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/reset-password'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <ResetPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile/orders'
+          element={
+            <ProtectedRoute>
+              <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       {background && (
@@ -59,14 +108,13 @@ const App = () => {
               />
             }
           />
-          {/* TODO - Не грузится после обновления страницы конкретного заказа */}
           <Route
             path='/feed/:number'
             element={
               <Modal
                 children={<OrderInfo />}
                 // TODO - номер заказа в заголовок
-                title={'# НОМЕР ЗАКАЗА'}
+                title={'ОРДЕР НУМБЕР'}
                 onClose={() => {
                   navigate('/feed');
                 }}

@@ -1,12 +1,13 @@
+import { selectUser, selectUserProgressCheck } from '@selectors';
+import { Preloader } from '@ui';
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  const user = {
-    name: '',
-    email: ''
-  };
+  /** TODO: взять переменную из стора - ГОТОВО **/
+  const user = useSelector(selectUser) || { name: '', email: '' };
+  const isUserChecking = useSelector(selectUserProgressCheck);
 
   const [formValue, setFormValue] = useState({
     name: user.name,
@@ -17,8 +18,8 @@ export const Profile: FC = () => {
   useEffect(() => {
     setFormValue((prevState) => ({
       ...prevState,
-      name: user?.name || '',
-      email: user?.email || ''
+      name: user.name || '',
+      email: user.email || ''
     }));
   }, [user]);
 
@@ -47,6 +48,10 @@ export const Profile: FC = () => {
     }));
   };
 
+  if (isUserChecking) {
+    return <Preloader />;
+  }
+
   return (
     <ProfileUI
       formValue={formValue}
@@ -56,6 +61,4 @@ export const Profile: FC = () => {
       handleInputChange={handleInputChange}
     />
   );
-
-  return null;
 };
