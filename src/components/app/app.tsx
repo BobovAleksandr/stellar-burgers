@@ -26,6 +26,7 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const background = location.state?.background;
+  console.log(background, 'background')
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -35,15 +36,39 @@ const App = () => {
   }, []);
 
   return (
+    // TODO - модалки должны открываться
     <div className={styles.app}>
       <AppHeader />
-
       <Routes location={background || location}>
         <Route path='/feed' element={<Feed />} />
-        <Route path='/feed/:number' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
         <Route path='/' element={<ConstructorPage />} />
-        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route
+            path='/ingredients/:id'
+            element={
+              <Modal
+                children={<IngredientDetails />}
+                title={'Детали ингридиента'}
+                onClose={() => {
+                  navigate('/');
+                }}
+              />
+            }
+          />
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal
+                children={<OrderInfo />}
+                // TODO - номер заказа в заголовок
+                title={'ОРДЕР НУМБЕР'}
+                onClose={() => {
+                  navigate('/feed');
+                }}
+              />
+            }
+          />
+        
         <Route
           path='/register'
           element={

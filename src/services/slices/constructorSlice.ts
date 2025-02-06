@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TIngredient, TOrder } from '@utils-types';
+import { ActionCreatorWithPayload, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
 
 type constructorState = {
   bun: TIngredient | null;
@@ -8,7 +8,7 @@ type constructorState = {
 
 const initialState: constructorState = {
   bun: null,
-  ingredients: []
+  ingredients: [],
 };
 
 const consctructorSlice = createSlice({
@@ -19,19 +19,21 @@ const consctructorSlice = createSlice({
       if (action.payload.type === 'bun') {
         state.bun = action.payload;
       } else {
-        state.ingredients.push(action.payload);
+        const ingredient = action.payload;
+        // ingredient.id = String(state.ingredients.length);
+        state.ingredients.push(ingredient);
       }
     },
-    deleteIngredient: (state, action: PayloadAction<TIngredient>) => {
-      if (action.payload.type === 'bun') {
-        state.bun = null;
-      } else {
-        state.ingredients.filter(
-          (ingredient) => ingredient._id !== action.payload._id
-        );
-      }
-    }
+    deleteIngredient: (state, action: PayloadAction<TConstructorIngredient>) => {
+      state.ingredients = state.ingredients.filter((ingredient) => ingredient._id !== action.payload.id);
+    },
+    clearConstructorData: (state) => {
+      state.bun = null;
+      state.ingredients = [];
+    },
   }
 });
+
+export const { addIngredient, deleteIngredient, clearConstructorData } = consctructorSlice.actions;
 
 export default consctructorSlice;
