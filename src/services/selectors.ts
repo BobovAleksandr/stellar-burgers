@@ -6,10 +6,11 @@ export const selectIngredientsLoadingStatus = (state: RootState) =>
 export const selectIngredients = (state: RootState) =>
   state.ingredients.ingredients;
 
-// feed selectors
-export const selectFeedState = (state: RootState) => state.feeds;
-export const selectOrders = (state: RootState) => state.feeds.orders;
-export const selectOrder = (state: RootState) => state.feeds.selectedOrder;
+// orders & feed selectors
+export const selectFeedState = (state: RootState) => state.orders;
+export const selectFeeds = (state: RootState) => state.orders.feeds;
+export const selectOrders = (state: RootState) => state.orders.orders;
+export const selectOrder = (state: RootState) => state.orders.selectedOrder;
 
 // constructor selectors
 export const selectConstructorIems = (state: RootState) =>
@@ -25,4 +26,7 @@ export const selectError = (state: RootState) => state.user.error;
 export const selectOrderRequest = (state: RootState) =>
   state.orderSlice.orderRequest;
 export const selectOrderData = (state: RootState) => state.orderSlice.orderData;
-export const selectOrderName = (state: RootState) => state.orderSlice.name;
+
+export const selectOrderIngredients = (state: RootState) => state.orderSlice.orderIngredients;
+
+// TODO Типизировать все dispatch, скрин в тг

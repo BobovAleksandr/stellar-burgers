@@ -1,14 +1,14 @@
 import { combineSlices } from '@reduxjs/toolkit';
 import ingredientsSlice from './slices/ingredientsSlice';
 import consctructorSlice from './slices/constructorSlice';
-import feedsSlice from './slices/feedsSlice';
+import ordersSlice from './slices/ordersSlice';
 import userSlice from './slices/userSlice';
 import orderSlice from './slices/orderSlice';
 
 const rootReducer = combineSlices(
   ingredientsSlice,
   consctructorSlice,
-  feedsSlice,
+  ordersSlice,
   userSlice,
   orderSlice
 );

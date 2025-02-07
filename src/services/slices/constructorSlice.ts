@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient } from '@utils-types';
 
-type constructorState = {
+export type constructorState = {
   bun: TConstructorIngredient | null;
   ingredients: TConstructorIngredient[];
 };
@@ -41,9 +41,9 @@ const consctructorSlice = createSlice({
       const currentIngredientIndex = state.ingredients.findIndex(
         (ingredient) => (ingredient.id = action.payload.id)
       );
-      state.ingredients = state.ingredients
-        .toSpliced(currentIngredientIndex, 1)
-        .toSpliced(currentIngredientIndex + 1, 0, action.payload);
+      const nextIngredientIndex = currentIngredientIndex + 1;
+      console.log(currentIngredientIndex, nextIngredientIndex);
+      [state.ingredients[currentIngredientIndex], state.ingredients[nextIngredientIndex]] = [state.ingredients[nextIngredientIndex], state.ingredients[currentIngredientIndex]]
     },
     moveIngredientUp: (
       state,
@@ -52,9 +52,8 @@ const consctructorSlice = createSlice({
       const currentIngredientIndex = state.ingredients.findIndex(
         (ingredient) => (ingredient.id = action.payload.id)
       );
-      state.ingredients = state.ingredients
-        .toSpliced(currentIngredientIndex, 1)
-        .toSpliced(currentIngredientIndex - 1, 0, action.payload);
+      const nextIngredientIndex = currentIngredientIndex - 1;
+      [state.ingredients[currentIngredientIndex], state.ingredients[nextIngredientIndex]] = [state.ingredients[nextIngredientIndex], state.ingredients[currentIngredientIndex]]
     }
   }
 });

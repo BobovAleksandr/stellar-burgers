@@ -4,22 +4,22 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIngredients, selectOrder } from '@selectors';
-import { fetchOrderByNumber } from '../../services/slices/feedsSlice';
+import { fetchOrderByNumber } from '../../services/slices/ordersSlice';
 import { AppDispatch } from '../../services/store';
 import { useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора - ГОТОВО */
 
-  const { number } = useParams();
+  const { id } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
   const ingredients = useSelector(selectIngredients);
   const orderData = useSelector(selectOrder);
 
   useEffect(() => {
-    if (number) {
-      dispatch(fetchOrderByNumber(Number(number)));
+    if (id) {
+      dispatch(fetchOrderByNumber(Number(id)));
     }
   }, []);
 

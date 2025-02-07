@@ -45,13 +45,21 @@ const App = () => {
         <Route path='*' element={<NotFound404 />} />
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
-        <Route path='/feed/:number' element={<OrderInfo />} />
+        <Route path='/feed/:id' element={<OrderInfo />} />
 
         <Route
           path='/register'
           element={
             <ProtectedRoute onlyUnAuth>
               <Register />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile/orders/:id'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
             </ProtectedRoute>
           }
         />
@@ -112,7 +120,7 @@ const App = () => {
             }
           />
           <Route
-            path='/feed/:number'
+            path='/feed/:id'
             element={
               <Modal
                 children={<OrderInfo />}
@@ -124,7 +132,25 @@ const App = () => {
               />
             }
           />
+          <Route
+            path='/profile/orders/:id'
+            element={
+              <Modal
+                children={
+                <ProtectedRoute>
+                  <OrderInfo />
+                </ProtectedRoute>
+              }
+                // TODO - номер заказа в заголовок
+                title={'ОРДЕР НУМБЕР'}
+                onClose={() => {
+                  navigate('/profile/orders');
+                }}
+              />
+            }
+          />
         </Routes>
+        
       )}
     </div>
   );

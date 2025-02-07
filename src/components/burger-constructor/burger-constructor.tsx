@@ -1,26 +1,40 @@
-import { FC, useMemo } from 'react';
-import { TConstructorIngredient, TIngredient } from '@utils-types';
+import { FC, useEffect, useMemo } from 'react';
+import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   selectConstructorIems,
   selectOrderData,
-  selectOrderRequest
+  selectOrderRequest,
+  selectOrderIngredients
 } from '@selectors';
+import { clearOrderData, createOrder, fetchOrderBurger } from '../../services/slices/orderSlice';
+import { AppDispatch } from 'src/services/store';
+import { clearConstructorData } from '../../services/slices/constructorSlice';
 
 export const BurgerConstructor: FC = () => {
-  /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора - ГОТОВО */
+  const dispatch = useDispatch<AppDispatch>();
   const constructorItems = useSelector(selectConstructorIems);
   const orderRequest = useSelector(selectOrderRequest);
   const orderModalData = useSelector(selectOrderData);
+  const orderIngredients = useSelector(selectOrderIngredients);
 
   const onOrderClick = () => {
-    if (!constructorItems.bun || orderRequest) return;
+    if (constructorItems.bun) {
+      dispatch(createOrder(constructorItems));
+    }
   };
 
   const closeOrderModal = () => {
-    //TODO
+    dispatch(clearOrderData());
+    dispatch(clearConstructorData());
   };
+
+  useEffect(() => {
+    if (orderIngredients.length > 0) {
+      dispatch(fetchOrderBurger(orderIngredients));
+    }
+  }, [orderIngredients, dispatch])
 
   const price = useMemo(
     () =>
