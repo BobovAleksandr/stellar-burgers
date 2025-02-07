@@ -12,7 +12,7 @@ type orderState = {
 const initialState: orderState = {
   orderRequest: false,
   orderIngredients: [],
-  orderData: null,
+  orderData: null
 };
 
 export const fetchOrderBurger = createAsyncThunk(
@@ -25,8 +25,10 @@ const orderSlice = createSlice({
   initialState,
   reducers: {
     createOrder: (state, action: PayloadAction<constructorState>) => {
-      state.orderIngredients = action.payload.ingredients.map(ingredient => ingredient._id);
-      
+      state.orderIngredients = action.payload.ingredients.map(
+        (ingredient) => ingredient._id
+      );
+
       if (action.payload.bun) {
         state.orderIngredients.push(action.payload.bun?._id);
         state.orderIngredients.unshift(action.payload.bun?._id);
@@ -42,10 +44,13 @@ const orderSlice = createSlice({
       .addCase(fetchOrderBurger.pending, (state) => {
         state.orderRequest = true;
       })
-      .addCase(fetchOrderBurger.fulfilled, (state, action: PayloadAction<TNewOrderResponse>) => {
-        state.orderRequest = false;
-        state.orderData = action.payload.order;
-      })
+      .addCase(
+        fetchOrderBurger.fulfilled,
+        (state, action: PayloadAction<TNewOrderResponse>) => {
+          state.orderRequest = false;
+          state.orderData = action.payload.order;
+        }
+      )
       .addCase(fetchOrderBurger.rejected, (state) => {
         state.orderRequest = false;
         console.log('Не удалось разместить заказ');

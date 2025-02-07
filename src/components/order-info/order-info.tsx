@@ -2,18 +2,16 @@ import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectIngredients, selectOrder } from '@selectors';
 import { fetchOrderByNumber } from '../../services/slices/ordersSlice';
-import { AppDispatch } from '../../services/store';
 import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../services/hooks';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора - ГОТОВО */
-
   const { id } = useParams();
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const ingredients = useSelector(selectIngredients);
   const orderData = useSelector(selectOrder);
 

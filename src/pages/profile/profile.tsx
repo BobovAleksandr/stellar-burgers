@@ -2,15 +2,14 @@ import { selectUser, selectUserProgressCheck } from '@selectors';
 import { Preloader } from '@ui';
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../services/store';
+import { useSelector } from 'react-redux';
 import { fetchUpdateUser } from '../../services/slices/userSlice';
+import { useAppDispatch } from '../../services/hooks';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора - ГОТОВО **/
   const user = useSelector(selectUser) || { name: '', email: '' };
   const isUserChecking = useSelector(selectUserProgressCheck);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const [formValue, setFormValue] = useState({
     name: user.name,

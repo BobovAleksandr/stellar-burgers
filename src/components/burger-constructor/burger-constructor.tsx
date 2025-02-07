@@ -1,40 +1,54 @@
 import { FC, useEffect, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   selectConstructorIems,
   selectOrderData,
   selectOrderRequest,
-  selectOrderIngredients
+  selectOrderIngredients,
+  selectUser
 } from '@selectors';
-import { clearOrderData, createOrder, fetchOrderBurger } from '../../services/slices/orderSlice';
-import { AppDispatch } from 'src/services/store';
+import {
+  clearOrderData,
+  createOrder,
+  fetchOrderBurger
+} from '../../services/slices/orderSlice';
 import { clearConstructorData } from '../../services/slices/constructorSlice';
+import { useAppDispatch } from '../../services/hooks';
+import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const constructorItems = useSelector(selectConstructorIems);
   const orderRequest = useSelector(selectOrderRequest);
   const orderModalData = useSelector(selectOrderData);
   const orderIngredients = useSelector(selectOrderIngredients);
+  const user = useSelector(selectUser);
+  const navigate = useNavigate();
 
   const onOrderClick = () => {
-    if (constructorItems.bun) {
+    if (!constructorItems.bun) return;
+
+    if (!user) {
+      navigate('/login');
+    } else {
       dispatch(createOrder(constructorItems));
     }
   };
 
   const closeOrderModal = () => {
-    dispatch(clearOrderData());
-    dispatch(clearConstructorData());
+    if (!orderRequest) {
+      dispatch(clearOrderData());
+      dispatch(clearConstructorData());
+    }
   };
 
   useEffect(() => {
     if (orderIngredients.length > 0) {
       dispatch(fetchOrderBurger(orderIngredients));
     }
-  }, [orderIngredients, dispatch])
+  }, [orderIngredients, dispatch]);
 
   const price = useMemo(
     () =>

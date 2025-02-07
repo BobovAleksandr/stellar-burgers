@@ -11,41 +11,67 @@ import {
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useMatch } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { useEffect } from 'react';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../services/store';
 import { ProtectedRoute } from '../../utils/protectedRoute';
 import { fetchGetUser } from '../../services/slices/userSlice';
+import { useAppDispatch } from '../../services/hooks';
 
 const App = () => {
+  const profileMatch = useMatch('profile/orders/:number')?.params.number;
+  const feedMatch = useMatch('feed/:number')?.params.number;
+  const orderNumber = profileMatch || feedMatch;
   const navigate = useNavigate();
   const location = useLocation();
   const background = location.state?.background;
-  console.log(background, 'background');
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchIngredients());
     dispatch(fetchGetUser());
+    dispatch(fetchIngredients());
   }, []);
 
   return (
-    // TODO - компонент модалки при прмом URL поправить чтобы был по центру
-    // Если не залогинен - редирект на то же окно после логина
     <div className={styles.app}>
       <AppHeader />
       <Routes location={background || location}>
         <Route path='/feed' element={<Feed />} />
-        <Route path='*' element={<NotFound404 />} />
+        <Route
+          path='*'
+          element={
+            <div className={styles.detailPageWrap}>
+              <NotFound404 />
+            </div>
+          }
+        />
         <Route path='/' element={<ConstructorPage />} />
-        <Route path='/ingredients/:id' element={<IngredientDetails />} />
-        <Route path='/feed/:id' element={<OrderInfo />} />
+        <Route
+          path='/ingredients/:id'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p className={`text text_type_main-large ${styles.detailHeader}`}>
+                Детали ингредиента
+              </p>
+              <IngredientDetails />
+            </div>
+          }
+        />
+        <Route
+          path='/feed/:id'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p className={`text text_type_main-large ${styles.detailHeader}`}>
+                {(orderNumber && orderNumber.padStart(7, '#0')) || ''}
+              </p>
+              <OrderInfo />
+            </div>
+          }
+        />
 
         <Route
           path='/register'
@@ -59,7 +85,14 @@ const App = () => {
           path='/profile/orders/:id'
           element={
             <ProtectedRoute>
-              <OrderInfo />
+              <div className={styles.detailPageWrap}>
+                <p
+                  className={`text text_type_main-large ${styles.detailHeader}`}
+                >
+                  {(orderNumber && orderNumber.padStart(7, '#0')) || ''}
+                </p>
+                <OrderInfo />
+              </div>
             </ProtectedRoute>
           }
         />
@@ -124,8 +157,7 @@ const App = () => {
             element={
               <Modal
                 children={<OrderInfo />}
-                // TODO - номер заказа в заголовок
-                title={'ОРДЕР НУМБЕР'}
+                title={(orderNumber && orderNumber.padStart(7, '#0')) || ''}
                 onClose={() => {
                   navigate('/feed');
                 }}
@@ -137,12 +169,11 @@ const App = () => {
             element={
               <Modal
                 children={
-                <ProtectedRoute>
-                  <OrderInfo />
-                </ProtectedRoute>
-              }
-                // TODO - номер заказа в заголовок
-                title={'ОРДЕР НУМБЕР'}
+                  <ProtectedRoute>
+                    <OrderInfo />
+                  </ProtectedRoute>
+                }
+                title={(orderNumber && orderNumber.padStart(7, '#0')) || ''}
                 onClose={() => {
                   navigate('/profile/orders');
                 }}
@@ -150,7 +181,6 @@ const App = () => {
             }
           />
         </Routes>
-        
       )}
     </div>
   );

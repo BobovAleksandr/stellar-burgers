@@ -14,5 +14,3 @@ const rootReducer = combineSlices(
 );
 
 export default rootReducer;
-
-// TODO типизировать везде payload'ы

@@ -27,6 +27,5 @@ export const selectOrderRequest = (state: RootState) =>
   state.orderSlice.orderRequest;
 export const selectOrderData = (state: RootState) => state.orderSlice.orderData;
 
-export const selectOrderIngredients = (state: RootState) => state.orderSlice.orderIngredients;
-
-// TODO Типизировать все dispatch, скрин в тг
+export const selectOrderIngredients = (state: RootState) =>
+  state.orderSlice.orderIngredients;

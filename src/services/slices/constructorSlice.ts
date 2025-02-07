@@ -11,6 +11,23 @@ const initialState: constructorState = {
   ingredients: []
 };
 
+type movingPosition = 1 | -1;
+
+const changeElementIndex = (
+  array: TConstructorIngredient[],
+  element: TConstructorIngredient,
+  movePosition: movingPosition
+): TConstructorIngredient[] => {
+  const currentElementIndex = array.findIndex(
+    (ingredient) => ingredient.id === element.id
+  );
+  const temp = element;
+  array[currentElementIndex] = array[currentElementIndex + movePosition];
+  array[currentElementIndex + movePosition] = temp;
+
+  return array;
+};
+
 const consctructorSlice = createSlice({
   name: 'consctructorSlice',
   initialState,
@@ -38,22 +55,13 @@ const consctructorSlice = createSlice({
       state,
       action: PayloadAction<TConstructorIngredient>
     ) => {
-      const currentIngredientIndex = state.ingredients.findIndex(
-        (ingredient) => (ingredient.id = action.payload.id)
-      );
-      const nextIngredientIndex = currentIngredientIndex + 1;
-      console.log(currentIngredientIndex, nextIngredientIndex);
-      [state.ingredients[currentIngredientIndex], state.ingredients[nextIngredientIndex]] = [state.ingredients[nextIngredientIndex], state.ingredients[currentIngredientIndex]]
+      changeElementIndex(state.ingredients, action.payload, 1);
     },
     moveIngredientUp: (
       state,
       action: PayloadAction<TConstructorIngredient>
     ) => {
-      const currentIngredientIndex = state.ingredients.findIndex(
-        (ingredient) => (ingredient.id = action.payload.id)
-      );
-      const nextIngredientIndex = currentIngredientIndex - 1;
-      [state.ingredients[currentIngredientIndex], state.ingredients[nextIngredientIndex]] = [state.ingredients[nextIngredientIndex], state.ingredients[currentIngredientIndex]]
+      changeElementIndex(state.ingredients, action.payload, -1);
     }
   }
 });
