@@ -26,7 +26,7 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const background = location.state?.background;
-  console.log(background, 'background')
+  console.log(background, 'background');
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -36,39 +36,17 @@ const App = () => {
   }, []);
 
   return (
-    // TODO - модалки должны открываться
+    // TODO - компонент модалки при прмом URL поправить чтобы был по центру
+    // Если не залогинен - редирект на то же окно после логина
     <div className={styles.app}>
       <AppHeader />
       <Routes location={background || location}>
         <Route path='/feed' element={<Feed />} />
         <Route path='*' element={<NotFound404 />} />
         <Route path='/' element={<ConstructorPage />} />
-        <Route
-            path='/ingredients/:id'
-            element={
-              <Modal
-                children={<IngredientDetails />}
-                title={'Детали ингридиента'}
-                onClose={() => {
-                  navigate('/');
-                }}
-              />
-            }
-          />
-          <Route
-            path='/feed/:number'
-            element={
-              <Modal
-                children={<OrderInfo />}
-                // TODO - номер заказа в заголовок
-                title={'ОРДЕР НУМБЕР'}
-                onClose={() => {
-                  navigate('/feed');
-                }}
-              />
-            }
-          />
-        
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
+
         <Route
           path='/register'
           element={

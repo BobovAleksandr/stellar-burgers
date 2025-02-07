@@ -4,13 +4,20 @@ import { useDispatch } from 'react-redux';
 import { BurgerIngredientUI } from '@ui';
 import { TBurgerIngredientProps } from './type';
 import { addIngredient } from '../../services/slices/constructorSlice';
+import { TConstructorIngredient } from '@utils-types';
+import { v4 as newRandomId } from 'uuid';
 
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
+    const newId = newRandomId();
     const location = useLocation();
     const dispatch = useDispatch();
     const handleAdd = () => {
-      dispatch(addIngredient(ingredient));
+      const constructorIngredient = {
+        ...ingredient,
+        id: newId
+      } as TConstructorIngredient;
+      dispatch(addIngredient(constructorIngredient));
     };
 
     return (

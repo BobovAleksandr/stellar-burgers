@@ -1,10 +1,12 @@
 import {
+  forgotPasswordApi,
   getUserApi,
   loginUserApi,
   logoutApi,
   registerUserApi,
   TLoginData,
-  TRegisterData
+  TRegisterData,
+  updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
@@ -13,12 +15,13 @@ import { deleteCookie, setCookie } from '../../utils/cookie';
 type userState = {
   isUserCheckInProgress: boolean;
   user: TUser | null;
+  error: string | undefined;
 };
 
 const initialState: userState = {
   isUserCheckInProgress: false,
-  // user: { name: '12321', email: '321321312' },
-  user: null
+  user: null,
+  error: undefined
 };
 
 export const fetchRegisterUser = createAsyncThunk(
@@ -38,6 +41,11 @@ export const fetchLogoutUser = createAsyncThunk(
 export const fetchLoginUser = createAsyncThunk(
   'user/fetchLoginUser',
   async (data: TLoginData) => loginUserApi(data)
+);
+
+export const fetchUpdateUser = createAsyncThunk(
+  'user/fetchUpdateUser',
+  async (user: Partial<TRegisterData>) => updateUserApi(user)
 );
 
 const userSlice = createSlice({
@@ -95,9 +103,21 @@ const userSlice = createSlice({
         setCookie('accessToken', action.payload.accessToken);
         localStorage.setItem('refreshToken', action.payload.refreshToken);
       })
-      .addCase(fetchLoginUser.rejected, (state) => {
+      .addCase(fetchLoginUser.rejected, (state, action) => {
         state.isUserCheckInProgress = false;
-        console.log('Не удалось войти в профиль');
+        state.error = action.error.message;
+      })
+
+      .addCase(fetchUpdateUser.pending, (state) => {
+        state.isUserCheckInProgress = true;
+      })
+      .addCase(fetchUpdateUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.isUserCheckInProgress = false;
+      })
+      .addCase(fetchUpdateUser.rejected, (state) => {
+        state.isUserCheckInProgress = false;
+        console.log('Не удалось обновить данные профиля');
       });
   }
 });

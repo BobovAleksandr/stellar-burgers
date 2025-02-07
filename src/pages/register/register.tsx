@@ -3,7 +3,7 @@ import { RegisterUI } from '@ui-pages';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from 'src/services/store';
 import { fetchRegisterUser } from '../../services/slices/userSlice';
-import { selectUserProgressCheck } from '@selectors';
+import { selectError, selectUserProgressCheck } from '@selectors';
 import { Preloader } from '@ui';
 
 export const Register: FC = () => {
@@ -12,6 +12,7 @@ export const Register: FC = () => {
   const [password, setPassword] = useState('');
   const dipsatch = useDispatch<AppDispatch>();
   const isUserChecking = useSelector(selectUserProgressCheck);
+  const error = useSelector(selectError) || '';
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -24,7 +25,7 @@ export const Register: FC = () => {
 
   return (
     <RegisterUI
-      errorText=''
+      errorText={error}
       email={email}
       userName={userName}
       password={password}
