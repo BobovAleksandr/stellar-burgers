@@ -1,16 +1,16 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { fetchRegisterUser } from '../../services/slices/userSlice';
 import { selectError, selectUserProgressCheck } from '@selectors';
 import { Preloader } from '@ui';
-import { useAppDispatch } from '../../services/hooks';
+import { useDispatch } from '../../services/store';
 
 export const Register: FC = () => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const isUserChecking = useSelector(selectUserProgressCheck);
   const error = useSelector(selectError) || '';
 

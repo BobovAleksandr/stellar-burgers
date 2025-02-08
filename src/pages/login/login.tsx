@@ -1,16 +1,16 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { Preloader } from '@ui';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { selectError, selectUserProgressCheck } from '@selectors';
 import { fetchLoginUser } from '../../services/slices/userSlice';
-import { useAppDispatch } from '../../services/hooks';
+import { useDispatch } from '../../services/store';
 
 export const Login: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const isUserChecking = useSelector(selectUserProgressCheck);
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const error = useSelector(selectError) || '';
 
   const handleSubmit = (e: SyntheticEvent) => {

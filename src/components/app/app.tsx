@@ -17,9 +17,9 @@ import { useLocation } from 'react-router-dom';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { useEffect } from 'react';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice';
-import { ProtectedRoute } from '../../utils/protectedRoute';
+import { ProtectedRoute } from '../protectedRoute/protectedRoute';
 import { fetchGetUser } from '../../services/slices/userSlice';
-import { useAppDispatch } from '../../services/hooks';
+import { useDispatch } from '../../services/store';
 
 const App = () => {
   const profileMatch = useMatch('profile/orders/:number')?.params.number;
@@ -29,7 +29,7 @@ const App = () => {
   const location = useLocation();
   const background = location.state?.background;
 
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchGetUser());

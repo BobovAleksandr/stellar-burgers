@@ -2,16 +2,16 @@ import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { selectIngredients, selectOrder } from '@selectors';
 import { fetchOrderByNumber } from '../../services/slices/ordersSlice';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch } from '../../services/hooks';
+import { useDispatch } from '../../services/store';
 
 export const OrderInfo: FC = () => {
   const { id } = useParams();
 
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const ingredients = useSelector(selectIngredients);
   const orderData = useSelector(selectOrder);
 
