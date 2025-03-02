@@ -1,4 +1,4 @@
-import { orderBurgerApi, TNewOrderResponse } from '@api';
+import { orderBurgerApi, TNewOrderResponse } from '../../utils/burger-api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { constructorState } from './constructorSlice';
@@ -16,7 +16,7 @@ const initialState: orderState = {
 };
 
 export const fetchOrderBurger = createAsyncThunk(
-  'user/fetchOrderBurger',
+  'orderSlice/fetchOrderBurger',
   async (data: string[]) => orderBurgerApi(data)
 );
 

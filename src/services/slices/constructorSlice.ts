@@ -18,6 +18,7 @@ const changeElementIndex = (
   element: TConstructorIngredient,
   movePosition: movingPosition
 ): TConstructorIngredient[] => {
+  const newArray = [...array];
   const currentElementIndex = array.findIndex(
     (ingredient) => ingredient.id === element.id
   );
@@ -25,7 +26,7 @@ const changeElementIndex = (
   array[currentElementIndex] = array[currentElementIndex + movePosition];
   array[currentElementIndex + movePosition] = temp;
 
-  return array;
+  return newArray;
 };
 
 const consctructorSlice = createSlice({
