@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.88% </span>
+                <span class="strong">94.44% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/18</span>
+                <span class='fraction'>17/18</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.88% </span>
+                <span class="strong">94.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>16/18</span>
+                <span class='fraction'>17/18</span>
             </div>
         
             
@@ -126,11 +126,21 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -139,13 +149,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -175,8 +179,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -198,17 +202,19 @@ type orderState = {
   orderRequest: boolean;
   orderIngredients: string[];
   orderData: TOrder | null;
+  error: null | string;
 };
 &nbsp;
 const initialState: orderState = {
   orderRequest: false,
   orderIngredients: [],
-  orderData: null
+  orderData: null,
+  error: null
 };
 &nbsp;
 export const fetchOrderBurger = createAsyncThunk(
   'orderSlice/fetchOrderBurger',
-  async (data: string[]) =&gt; orderBurgerApi(data)
+<span class="fstat-no" title="function not covered" >  as</span>ync (data: string[]) =&gt; <span class="cstat-no" title="statement not covered" >orderBurgerApi(data)</span>
 );
 &nbsp;
 const orderSlice = createSlice({
@@ -237,14 +243,14 @@ const orderSlice = createSlice({
       })
       .addCase(
         fetchOrderBurger.fulfilled,
-<span class="fstat-no" title="function not covered" >        (s</span>tate, action: PayloadAction&lt;TNewOrderResponse&gt;) =&gt; {
-<span class="cstat-no" title="statement not covered" >          state.orderRequest = false;</span>
-<span class="cstat-no" title="statement not covered" >          state.orderData = action.payload.order;</span>
+        (state, action: PayloadAction&lt;TNewOrderResponse&gt;) =&gt; {
+          state.orderRequest = false;
+          state.orderData = action.payload.order;
         }
       )
-      .addCase(fetchOrderBurger.rejected, (state) =&gt; {
+      .addCase(fetchOrderBurger.rejected, (state, action) =&gt; {
         state.orderRequest = false;
-        console.log('Не удалось разместить заказ');
+        state.error = action.error.message!;
       });
   }
 });
@@ -259,7 +265,7 @@ export default orderSlice;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-02T20:45:32.021Z
+                at 2025-03-03T18:48:06.880Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

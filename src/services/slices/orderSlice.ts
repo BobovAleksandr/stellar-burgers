@@ -7,12 +7,14 @@ type orderState = {
   orderRequest: boolean;
   orderIngredients: string[];
   orderData: TOrder | null;
+  error: null | string;
 };
 
 const initialState: orderState = {
   orderRequest: false,
   orderIngredients: [],
-  orderData: null
+  orderData: null,
+  error: null
 };
 
 export const fetchOrderBurger = createAsyncThunk(
@@ -51,9 +53,9 @@ const orderSlice = createSlice({
           state.orderData = action.payload.order;
         }
       )
-      .addCase(fetchOrderBurger.rejected, (state) => {
+      .addCase(fetchOrderBurger.rejected, (state, action) => {
         state.orderRequest = false;
-        console.log('Не удалось разместить заказ');
+        state.error = action.error.message!;
       });
   }
 });

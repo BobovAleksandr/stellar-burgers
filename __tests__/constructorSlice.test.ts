@@ -8,7 +8,7 @@ import consctructorSlice, {
 } from '../src/services/slices/constructorSlice';
 import { TConstructorIngredient } from './../src/utils/types';
 
-describe('Проверка consctructorSlice', () => {
+describe('Тестирование consctructorSlice', () => {
   const testBun: TConstructorIngredient = {
     name: 'Булка',
     type: 'bun',

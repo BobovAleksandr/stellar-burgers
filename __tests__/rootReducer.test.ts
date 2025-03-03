@@ -1,12 +1,12 @@
 import rootReducer from './../src/services/rootReducer';
 
-describe('Проверка инициализации стора', () => {
-  test('Проверка RootReducer, должен возвращать стейт без изменений', () => {
+describe('Тестирование инициализации стора', () => {
+  test('Тестирование RootReducer, должен возвращать стейт без изменений', () => {
     const initialState = {
       ingredients: {
         ingredients: [],
         isLoading: false,
-        error: ''
+        error: null
       },
       consctructorSlice: {
         bun: null,
@@ -17,18 +17,19 @@ describe('Проверка инициализации стора', () => {
         orders: [],
         total: 0,
         totalToday: 0,
-        error: '',
+        error: null,
         selectedOrder: null
       },
       user: {
         isUserCheckInProgress: false,
         user: null,
-        error: undefined
+        error: null
       },
       orderSlice: {
         orderRequest: false,
         orderIngredients: [],
-        orderData: null
+        orderData: null,
+        error: null
       }
     };
     const newState = rootReducer(initialState, {} as any);

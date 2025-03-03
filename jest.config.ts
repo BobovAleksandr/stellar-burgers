@@ -211,7 +211,8 @@ module.exports = {
   collectCoverage: true,
   coverageReporters: ['text', 'lcov'],
   coverageDirectory: 'coverage',
-  coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/', '/src/utils']
+  coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/', '/src/utils'],
+  testEnvironment: 'jsdom'
 };
 
 export default config;

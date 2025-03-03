@@ -15,13 +15,13 @@ import { deleteCookie, setCookie } from '../../utils/cookie';
 type userState = {
   isUserCheckInProgress: boolean;
   user: TUser | null;
-  error: string | undefined;
+  error: string | null;
 };
 
 const initialState: userState = {
   isUserCheckInProgress: false,
   user: null,
-  error: undefined
+  error: null
 };
 
 export const fetchRegisterUser = createAsyncThunk(
@@ -63,9 +63,9 @@ const userSlice = createSlice({
         localStorage.setItem('refreshToken', action.payload.refreshToken);
         state.isUserCheckInProgress = false;
       })
-      .addCase(fetchRegisterUser.rejected, (state) => {
+      .addCase(fetchRegisterUser.rejected, (state, action) => {
         state.isUserCheckInProgress = false;
-        console.log('Ошика регистрации');
+        state.error = action.error.message!;
       })
 
       .addCase(fetchGetUser.pending, (state) => {
@@ -75,9 +75,9 @@ const userSlice = createSlice({
         state.user = action.payload.user;
         state.isUserCheckInProgress = false;
       })
-      .addCase(fetchGetUser.rejected, (state) => {
+      .addCase(fetchGetUser.rejected, (state, action) => {
         state.isUserCheckInProgress = false;
-        console.log('Пользователь не авторизован');
+        state.error = action.error.message!;
       })
 
       .addCase(fetchLogoutUser.pending, (state) => {
@@ -89,9 +89,9 @@ const userSlice = createSlice({
         localStorage.removeItem('refreshToken');
         deleteCookie('accessToken');
       })
-      .addCase(fetchLogoutUser.rejected, (state) => {
+      .addCase(fetchLogoutUser.rejected, (state, action) => {
         state.isUserCheckInProgress = false;
-        console.log('Не удалось выйти из профиля');
+        state.error = action.error.message!;
       })
 
       .addCase(fetchLoginUser.pending, (state) => {
@@ -105,7 +105,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchLoginUser.rejected, (state, action) => {
         state.isUserCheckInProgress = false;
-        state.error = action.error.message;
+        state.error = action.error.message!;
       })
 
       .addCase(fetchUpdateUser.pending, (state) => {
@@ -115,9 +115,9 @@ const userSlice = createSlice({
         state.user = action.payload.user;
         state.isUserCheckInProgress = false;
       })
-      .addCase(fetchUpdateUser.rejected, (state) => {
+      .addCase(fetchUpdateUser.rejected, (state, action) => {
         state.isUserCheckInProgress = false;
-        console.log('Не удалось обновить данные профиля');
+        state.error = action.error.message!;
       });
   }
 });

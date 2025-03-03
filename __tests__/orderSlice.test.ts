@@ -1,16 +1,17 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { TNewOrderResponse } from '../src/utils/burger-api';
 import orderSlice, {
   clearOrderData,
   createOrder,
   fetchOrderBurger
 } from './../src/services/slices/orderSlice';
 
-describe('Проверка orderSlice', () => {
-  const orderSliceReducer = orderSlice.reducer;
+describe('Тестирование orderSlice', () => {
+  const reducer = orderSlice.reducer;
   const initialState = {
     orderRequest: false,
     orderIngredients: [],
-    orderData: null
+    orderData: null,
+    error: null
   };
   const testOrder = {
     bun: {
@@ -73,50 +74,71 @@ describe('Проверка orderSlice', () => {
     ]
   };
   const newTestOrderIngredients = ['_id0', '_id1', '_id2', '_id3', '_id0'];
-
-  test('Ингредиенты добавляются в заказ', () => {
-    const newState = orderSliceReducer(initialState, createOrder(testOrder));
-    const { orderIngredients } = newState;
-    expect(orderIngredients).toEqual(newTestOrderIngredients);
-  });
-
-  test('Ингредиенты удаляются из заказа', () => {
-    const stateWithIngredients = {
-      ...initialState,
-      orderIngredients: [...newTestOrderIngredients]
-    };
-    const newState = orderSliceReducer(stateWithIngredients, clearOrderData());
-    const { orderIngredients } = newState;
-    expect(orderIngredients).toHaveLength(0);
-  });
-
-  test('Заказ создаётся', async () => {
-    const expectedOrderData = {
-      success: true,
-      order: {
-        _id: '1234',
-        status: 'success',
-        name: 'newOrder',
-        createdAt: 'someDate',
-        updatedAt: 'someDate',
-        number: 1234,
-        ingredients: [...newTestOrderIngredients]
-      },
-      name: 'newOrderName'
-    };
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () => Promise.resolve(expectedOrderData)
-      })
-    ) as jest.Mock;
-    const store = configureStore({
-      reducer: { order: orderSliceReducer }
+  describe('Тестирование добавления и удаления ингредиентов', () => {
+    test('Ингредиенты добавляются в заказ', () => {
+      const newState = reducer(initialState, createOrder(testOrder));
+      const { orderIngredients } = newState;
+      expect(orderIngredients).toEqual(newTestOrderIngredients);
     });
-    await store.dispatch(fetchOrderBurger(newTestOrderIngredients));
-    const { orderRequest, orderIngredients, orderData } =
-      store.getState().order;
-    expect(orderRequest).toEqual(false);
-    expect(orderIngredients).toEqual(newTestOrderIngredients);
-    expect(orderData).toEqual(expectedOrderData);
+
+    test('Ингредиенты удаляются из заказа', () => {
+      const stateWithIngredients = {
+        ...initialState,
+        orderIngredients: [...newTestOrderIngredients]
+      };
+      const newState = reducer(stateWithIngredients, clearOrderData());
+      const { orderIngredients } = newState;
+      expect(orderIngredients).toHaveLength(0);
+    });
+  });
+  describe('Тестирование процесса создания заказа', () => {
+    test('Заказ создаётся (pending)', () => {
+      const expectedState = {
+        ...initialState,
+        orderRequest: true
+      };
+      const newState = reducer(
+        initialState,
+        fetchOrderBurger.pending('', [''])
+      );
+      expect(newState).toEqual(expectedState);
+    });
+
+    test('Заказ создаётся успешно (fulfilled)', () => {
+      const orderData: TNewOrderResponse = {
+        success: true,
+        order: {
+          _id: '1234',
+          status: 'success',
+          name: 'newOrder',
+          createdAt: 'someDate',
+          updatedAt: 'someDate',
+          number: 1234,
+          ingredients: [...newTestOrderIngredients]
+        },
+        name: 'newOrderName'
+      };
+      const expectedState = {
+        ...initialState,
+        orderData: orderData.order
+      };
+      const newState = reducer(
+        initialState,
+        fetchOrderBurger.fulfilled(orderData, '', [''])
+      );
+      expect(newState).toEqual(expectedState);
+    });
+    test('Заказ не создаётся (rejected)', () => {
+      const error = new Error('Test error');
+      const expectedState = {
+        ...initialState,
+        error: error.message
+      };
+      const newState = reducer(
+        initialState,
+        fetchOrderBurger.rejected(error, '', [''])
+      );
+      expect(newState).toEqual(expectedState);
+    });
   });
 });
