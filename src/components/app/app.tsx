@@ -145,7 +145,7 @@ const App = () => {
             element={
               <Modal
                 children={<IngredientDetails />}
-                title={'Детали ингридиента'}
+                title={'Детали ингредиента'}
                 onClose={() => {
                   navigate('/');
                 }}

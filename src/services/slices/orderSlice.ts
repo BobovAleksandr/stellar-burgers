@@ -1,4 +1,4 @@
-import { orderBurgerApi, TNewOrderResponse } from '@api';
+import { orderBurgerApi, TNewOrderResponse } from '../../utils/burger-api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { constructorState } from './constructorSlice';
@@ -7,16 +7,18 @@ type orderState = {
   orderRequest: boolean;
   orderIngredients: string[];
   orderData: TOrder | null;
+  error: null | string;
 };
 
 const initialState: orderState = {
   orderRequest: false,
   orderIngredients: [],
-  orderData: null
+  orderData: null,
+  error: null
 };
 
 export const fetchOrderBurger = createAsyncThunk(
-  'user/fetchOrderBurger',
+  'orderSlice/fetchOrderBurger',
   async (data: string[]) => orderBurgerApi(data)
 );
 
@@ -51,9 +53,9 @@ const orderSlice = createSlice({
           state.orderData = action.payload.order;
         }
       )
-      .addCase(fetchOrderBurger.rejected, (state) => {
+      .addCase(fetchOrderBurger.rejected, (state, action) => {
         state.orderRequest = false;
-        console.log('Не удалось разместить заказ');
+        state.error = action.error.message!;
       });
   }
 });
