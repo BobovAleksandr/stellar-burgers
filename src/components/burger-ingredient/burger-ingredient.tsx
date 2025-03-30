@@ -1,14 +1,24 @@
 import { FC, memo } from 'react';
 import { useLocation } from 'react-router-dom';
-
+import { useDispatch } from '../../services/store';
 import { BurgerIngredientUI } from '@ui';
 import { TBurgerIngredientProps } from './type';
+import { addIngredient } from '../../services/slices/constructorSlice';
+import { TConstructorIngredient } from '@utils-types';
+import { v4 as newRandomId } from 'uuid';
 
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
+    const newId = newRandomId();
     const location = useLocation();
-
-    const handleAdd = () => {};
+    const dispatch = useDispatch();
+    const handleAdd = () => {
+      const constructorIngredient = {
+        ...ingredient,
+        id: newId
+      } as TConstructorIngredient;
+      dispatch(addIngredient(constructorIngredient));
+    };
 
     return (
       <BurgerIngredientUI
